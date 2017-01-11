@@ -1,0 +1,94 @@
+package edu.wm.cs.cs301.slidingpuzzle;
+
+public class SimplePuzzleState implements PuzzleState {
+	
+	private int dimension;
+	private int empties;
+	private int[] board;
+	
+//	SimplePuzzleState(int dim, int empty){
+//		dimension = dim;
+//		empties = empty;
+//	}
+//	
+//	SimplePuzzleState(){
+//		
+//	}
+	
+	@Override
+	public void setToInitialState(int dimension, int numberOfEmptySlots) {
+		int i;
+		int filledBoxes;
+		
+		filledBoxes = dimension * dimension - numberOfEmptySlots;
+		
+		for(i = 0; i < filledBoxes; i++){
+			board[i] = i + 1;
+		}
+		
+		for(i = 0; i < numberOfEmptySlots; i++){
+			board[i + filledBoxes] = 0;
+		}
+		
+	}
+
+	@Override
+	public int getValue(int row, int column) {
+		int index;
+		int value;
+		
+		index = row * dimension + column;
+		value = board[index];
+		return value;
+	}
+
+	@Override
+	public PuzzleState getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Operation getOperation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPathLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public PuzzleState move(int row, int column, Operation op) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PuzzleState flip(int startRow, int startColumn, int endRow, int endColumn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PuzzleState shuffleBoard(int pathLength) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isEmpty(int row, int column) {
+		int index;
+		
+		index = row * dimension + column;
+		if (board[index] == 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+}

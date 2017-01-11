@@ -1,0 +1,101 @@
+package edu.wm.cs.cs301.slidingpuzzle;
+
+import java.util.ArrayList;
+
+public class SimplePuzzleState implements PuzzleState {
+	
+	public SimplePuzzleState state;
+	public Operation operation;
+	private SimplePuzzleState parent;
+	
+	SimplePuzzleState board = new SimplePuzzleState();
+	
+	public int test(){
+		return 0;
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((board == null) ? 0 : board.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SimplePuzzleState other = (SimplePuzzleState) obj;
+		if (board == null) {
+			if (other.board != null)
+				return false;
+		} else if (!board.equals(other.board))
+			return false;
+		return true;
+	}
+
+	@Override
+	public void setToInitialState(int dimension, int numberOfEmptySlots) {
+		board.put("(0,0)", new int 1);
+		
+		
+	}
+
+	@Override
+	public int getValue(int row, int column) {
+		return 0;
+	}
+
+	@Override
+	public PuzzleState getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Operation getOperation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPathLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public PuzzleState move(int row, int column, Operation op) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PuzzleState flip(int startRow, int startColumn, int endRow, int endColumn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PuzzleState shuffleBoard(int pathLength) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isEmpty(int row, int column) {
+		if(board.getValue(row, column) == 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+}

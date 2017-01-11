@@ -1,0 +1,253 @@
+package edu.wm.cs.cs301.slidingpuzzle;
+
+import java.util.Arrays;
+
+public class SimplePuzzleState implements PuzzleState {
+
+	
+	private int dimension;
+	private int empties;
+	private int[] board;
+	private PuzzleState parent;
+	private Operation operation;
+	
+	
+	SimplePuzzleState(int dim, int empty){
+		dimension = dim;
+		empties = empty;
+		board = new int[dimension * dimension];
+		
+	}
+	
+	SimplePuzzleState(){
+		
+	}
+	
+	public boolean checkInitialState(int dimension, int empties){
+		// this method was created to check if the board is in the initial state
+		
+		int i;
+		int filledBoxes;
+		
+		filledBoxes = dimension * dimension - empties;
+		
+		for(i = 0; i < filledBoxes; i++){
+			if(this.board[i] != i + 1){
+				return false;
+			}
+		}
+		for(i = 0; i < empties; i++){
+			if(this.board[i + filledBoxes] != 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(board);
+		result = prime * result + dimension;
+		result = prime * result + empties;
+		result = prime * result + ((operation == null) ? 0 : operation.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SimplePuzzleState other = (SimplePuzzleState) obj;
+		if (!Arrays.equals(board, other.board))
+			return false;
+		if (dimension != other.dimension)
+			return false;
+		if (empties != other.empties)
+			return false;
+		if (operation != other.operation)
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public void setToInitialState(int dimension, int numberOfEmptySlots) {
+		//need to set object that can be changed in this method
+		this.dimension = dimension;
+		this.empties = numberOfEmptySlots;
+		this.board = new int[dimension * dimension];
+		int i;
+		int filledBoxes;
+		
+		filledBoxes = dimension * dimension - numberOfEmptySlots;
+		
+		for(i = 0; i < filledBoxes; i++){
+			this.board[i] = i + 1;
+		}
+		
+		for(i = 0; i < numberOfEmptySlots; i++){
+			this.board[i + filledBoxes] = 0;
+		}
+	}
+
+	@Override
+	public int getValue(int row, int column) {
+		int index;
+		int value;
+		
+		index = row * dimension + column;
+		value = board[index];
+		return value;
+	}
+
+	@Override
+	public PuzzleState getParent() {
+		//if initial state, return null
+		if(this.checkInitialState(dimension, empties) == true){
+			return null;
+		}
+		//otherwise, return parent
+		else{
+			return parent;
+		}
+	}
+
+	@Override
+	public Operation getOperation() {
+		//if initial state, return null
+		if(this.checkInitialState(dimension, empties) == true){
+			return null;
+		}
+		//otherwise, return previous operation
+		else{
+			return operation;
+		}
+	}
+
+	@Override
+	public int getPathLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public PuzzleState move(int row, int column, Operation op) {
+		// TODO Auto-generated method stub
+		// first check if it is possible to move a tile from the given position in the given direction
+		// if it is possible, return a new instance of PuzzleState where the parent state is set to this object
+		// if move is not possible, return null
+		
+		int value;
+		int index;
+		int indexEmptyCheck;
+		int temp;
+		
+		value = getValue(row, column);
+		index = row * dimension + column;
+		
+		if (op == MOVERIGHT){
+			if (isEmpty(row, column + 1) == true){
+				this.parent = this;
+				this.operation = op;
+				//also sets the distance from the initial state for the returned state...?
+				
+				temp = this.board[index];
+				this.board[index] = this.board[index + 1];
+				this.board[index + 1] = temp;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		else if (op == MOVELEFT){
+			if (isEmpty(row, column - 1) == true){
+				this.parent = this;
+				this.operation = op;
+				//also sets the distance from the initial state for the returned state...?
+				
+				temp = this.board[index];
+				this.board[index] = this.board[index - 1];
+				this.board[index - 1] = temp;
+			}
+			else{
+				return null;
+			}
+			
+		}
+		
+		else if (op == MOVEUP){
+			if (isEmpty(row - 1, column) == true){
+				this.parent = this;
+				this.operation = op;
+				//also sets the distance from the initial state for the returned state...?
+				
+				temp = this.board[index];
+				this.board[index] = this.board[index - dimension];
+				this.board[index - dimension] = temp;
+			}
+			else{
+				return null;
+			}
+			
+		}
+		
+		else if (op == MOVEDOWN){
+			if (isEmpty(row + 1, column) == true){
+				this.parent = this;
+				this.operation = op;
+				//also sets the distance from the initial state for the returned state...?
+				
+				temp = this.board[index];
+				this.board[index] = this.board[index + dimension];
+				this.board[index + dimension] = temp;
+			}
+			else{
+				return null;
+			}
+			
+		}
+				
+		// add parent and previous operation to tuple containing path from initial state
+	}
+
+	@Override
+	public PuzzleState flip(int startRow, int startColumn, int endRow, int endColumn) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PuzzleState shuffleBoard(int pathLength) {
+		// TODO Auto-generated method stub
+		// shuffles the board to create a new game for the user
+		// need to create move operation before this one can be created
+		
+		return null;
+	}
+
+	@Override
+	public boolean isEmpty(int row, int column) {
+		int index;
+		
+		index = row * dimension + column;
+		if (board[index] == 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+}
